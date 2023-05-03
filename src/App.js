@@ -9,6 +9,7 @@ import RootLayout from "./layouts/RootLayout";
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
+import Write from "./pages/Write";
 import Register from "./pages/Register";
 
 const App = () => {
@@ -17,7 +18,8 @@ const App = () => {
       <Route>
         <Route path="/" element={<RootLayout />}>
           <Route index element={<Landing />} />
-          <Route path="home" element={<Home />}></Route>
+          <Route path="home" element={<Home />} />
+          <Route path="write" element={<Write />} />
         </Route>
         <Route path="register" element={<Register />} />
         <Route path="login" element={<Login />} />
