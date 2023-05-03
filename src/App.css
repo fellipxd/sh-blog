@@ -13,6 +13,14 @@ body {
   color: #333;
 }
 
+.btn {
+  background-color: transparent;
+  border: 1px solid teal;
+  color: teal;
+  padding: 0.5rem 1rem;
+  margin: 1rem;
+}
+
 /* navbar */
 
 /* .navbar {
