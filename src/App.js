@@ -10,7 +10,8 @@ import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Register from "./pages/Register";
-
+import "./tommy.css"
+ 
 const App = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
