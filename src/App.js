@@ -11,7 +11,8 @@ import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Write from "./pages/Write";
 import Register from "./pages/Register";
-
+import "./tommy.css"
+ 
 const App = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
