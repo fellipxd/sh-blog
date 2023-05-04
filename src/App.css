@@ -13,12 +13,20 @@ body {
   color: #333;
 }
 
-.btn {
-  background-color: transparent;
-  border: 1px solid teal;
-  color: teal;
-  padding: 0.5rem 1rem;
-  margin: 1rem;
+.post-img {
+  flex: 2;
+}
+
+.post-content {
+  flex: 3;
+}
+
+.single-content {
+  flex: 5;
+}
+
+.single-menu {
+  flex: 2;
 }
 
 /* navbar */
@@ -92,21 +100,10 @@ body {
   gap: 20px;
 }
 
-.add .content input {
+/* .add .content input {
   padding: 10px;
-  border: 1ps solid lightgray;
-}
-
-.editorContainer {
-  height: 300px;
-  overflow: scroll;
   border: 1px solid lightgray;
-}
-
-.editorContainer .editor {
-  height: 100%;
-  border: none;
-}
+} */
 
 .add .menu {
   flex: 2;
@@ -117,13 +114,12 @@ body {
 
 .item {
   padding: 10px;
-  border: 1ps solid lightgray;
+  border: 1px solid lightgray;
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   font-size: 12px;
-  color: #555;
 }
 
 .item h1 {
@@ -134,28 +130,6 @@ body {
   text-decoration: underline;
   cursor: pointer;
 }
-
-.btn {
-  display: flex;
-  justify-content: space-between;
-}
-
-#btn1 {
-  cursor: pointer;
-  color: teal;
-  background-color: white;
-  border: 1px solid teal;
-  padding: 3px 5px;
-}
-
-#btn2 {
-  cursor: pointer;
-  color: white;
-  background-color: teal;
-  border: 1px solid teal;
-  padding: 3px 5px;
-}
-
 .cat {
   display: flex;
   align-items: center;

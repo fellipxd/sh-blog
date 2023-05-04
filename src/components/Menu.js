@@ -1,7 +1,7 @@
-import { Link } from "react-router-dom";
-import Button from "../components/Button";
+import Button from "./Button";
 
-const Home = () => {
+const Menu = () => {
+
   const posts = [
     {
       id: 1,
@@ -30,29 +30,17 @@ const Home = () => {
   ];
 
   return (
-    <div className="">
-      <div className="mt-[50px] flex flex-col gap-[150px]">
-        {posts.map((post) => (
-          <div className="odd:flex-row-reverse flex gap-[100px]" key={post.id}>
-            <div className="post-img relative after:content-[''] after:w-full after:h-full after:bg-gray-100 after:absolute after:top-5 after:-left-5 after:-z-[1]">
-              <img
-                className="w-full max-h-[400px] object-cover"
-                src={post.img}
-                alt=""
-              />
-            </div>
-            <div className="post-content flex flex-col justify-between">
-              <Link to={`/post${post.id}`}>
-                <h1 className="flex text-5xl">{post.title}</h1>
-              </Link>
-              <p className="text-lg">{post.desc}</p>
-              <Button link="blog" primary={true} text="Read More" />
-            </div>
-          </div>
-        ))}
-      </div>
+    <div className="flex flex-col gap-[25px]">
+      <h1>Other posts you may like</h1>
+      {posts.map((post) => (
+        <div className="flex flex-col gap-[10px]" key={post.id}>
+          <img className="w-full h-[200px] object-cover" src={post.img} alt="" />
+          <h2 className="text-xl">{post.title}</h2>
+          <Button primary={true} text="Read More" />
+        </div>
+      ))}
     </div>
-  );
-};
+  )
+}
 
-export default Home;
+export default Menu

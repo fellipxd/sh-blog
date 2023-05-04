@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import Button from "../components/Button";
 
 const Login = () => {
   const [inputs, setInputs] = useState({
@@ -28,7 +29,9 @@ const Login = () => {
           className="t-input"
           onChange={handleChange}
         />
-        <button className="t-btn">Login</button>
+        <div className="text-center">
+          <Button link="/home" text="LOGIN" />
+        </div>
         <p className="t-p">This is an error!</p>
         <span className="t-span">
           Don't you have an account? <Link to="/register">Register</Link>

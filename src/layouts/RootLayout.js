@@ -4,10 +4,12 @@ import Footer from "../components/Footer";
 
 const RootLayout = () => {
   return (
-    <div>
-      <Navbar />
-      <Outlet />
-      <Footer />
+    <div className="flex justify-center">
+      <div className="w-[1024px]">
+        <Navbar />
+        <Outlet />
+        <Footer />
+      </div>
     </div>
   );
 };

@@ -1,41 +1,45 @@
-import {Link} from 'react-router-dom'
-import Logo from "../img/logo.png"
+import { Link } from "react-router-dom";
+import Logo from "../img/logo.png";
 
 const Navbar = () => {
   return (
-    <div className= "navbar">
+    <div className="navbar">
       <div className="container">
         <div className="logo">
-          <img src={Logo} alt="logo" />
+          <Link to="/home">
+            <img src={Logo} alt="logo" />
+          </Link>
         </div>
         <div className="links">
-          <Link className='navLink' to="/?cat=art">
+          <Link className="navLink" to="/?cat=art">
             <h6>ART</h6>
           </Link>
-          <Link className='navLink' to="/?cat=science">
+          <Link className="navLink" to="/?cat=science">
             <h6>SCIENCE</h6>
           </Link>
-          <Link className='navLink' to="/?cat=technology">
+          <Link className="navLink" to="/?cat=technology">
             <h6>TECHNOLOGY</h6>
           </Link>
-          <Link className='navLink' to="/?cat=cinema">
+          <Link className="navLink" to="/?cat=cinema">
             <h6>CINEMA</h6>
           </Link>
-          <Link className='navLink' to="/?cat=design">
+          <Link className="navLink" to="/?cat=design">
             <h6>DESIGN</h6>
           </Link>
-          <Link className='navLink' to="/?cat=food">
+          <Link className="navLink" to="/?cat=food">
             <h6>FOOD</h6>
           </Link>
           <span>John</span>
-          <span>Log out</span>
-          <span className='write'>
-            <Link to="/write">Write</Link>
+          <Link to="/">
+            <span>Log out</span>
+          </Link>
+          <span className="write">
+            <Link to="write">Write</Link>
           </span>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

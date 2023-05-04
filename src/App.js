@@ -11,15 +11,17 @@ import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Write from "./pages/Write";
 import Register from "./pages/Register";
-import "./tommy.css"
- 
+import "./tommy.css";
+import Single from "./pages/Single";
+
 const App = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route>
-        <Route path="/" element={<RootLayout />}>
-          <Route index element={<Landing />} />
-          <Route path="home" element={<Home />} />
+        <Route index element={<Landing />} />
+        <Route path="home" element={<RootLayout />}>
+          <Route index element={<Home />} />
+          <Route path="blog" element={<Single />} />
           <Route path="write" element={<Write />} />
         </Route>
         <Route path="register" element={<Register />} />
