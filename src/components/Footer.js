@@ -1,9 +1,9 @@
-import Logo from "../img/logo.png";
+import Logo from "./Logo";
 
 const Footer = () => {
   return (
-    <footer className="mt-[100px] p-[20px] bg-green-100 flex justify-between items-center">
-      <img className="h-[50px]" src={Logo} alt="" />
+    <footer className="mt-[100px] py-4 px-2 bg-purple-100 flex justify-between items-center">
+      <Logo />
       <span>
         Made with <b>React.js</b>
       </span>

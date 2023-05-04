@@ -7,7 +7,9 @@ const RootLayout = () => {
     <div className="flex justify-center">
       <div className="w-[1024px]">
         <Navbar />
-        <Outlet />
+        <div className="px-6">
+          <Outlet />
+        </div>
         <Footer />
       </div>
     </div>

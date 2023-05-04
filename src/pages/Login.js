@@ -12,8 +12,8 @@ const Login = () => {
   };
 
   return (
-    <div className="tommy">
-      <h1 className="t-h1">Login</h1>
+    <div className="tommy bg-gradient-to-br from-purple-600 to-purple-950">
+      <h1 className="t-h1 text-white">Login</h1>
       <form className="t-form">
         <input
           type="text"

@@ -1,44 +1,34 @@
 import { Link } from "react-router-dom";
-import Logo from "../img/logo.png";
+import Logo from "./Logo";
+import { BsSearch } from "react-icons/bs";
+import Register from "../pages/Register";
+import Login from "../pages/Login";
+import Button from "./Button";
 
 const Navbar = () => {
   return (
-    <div className="navbar">
-      <div className="container">
-        <div className="logo">
-          <Link to="/home">
-            <img src={Logo} alt="logo" />
-          </Link>
-        </div>
-        <div className="links">
-          <Link className="navLink" to="/?cat=art">
-            <h6>ART</h6>
-          </Link>
-          <Link className="navLink" to="/?cat=science">
-            <h6>SCIENCE</h6>
-          </Link>
-          <Link className="navLink" to="/?cat=technology">
-            <h6>TECHNOLOGY</h6>
-          </Link>
-          <Link className="navLink" to="/?cat=cinema">
-            <h6>CINEMA</h6>
-          </Link>
-          <Link className="navLink" to="/?cat=design">
-            <h6>DESIGN</h6>
-          </Link>
-          <Link className="navLink" to="/?cat=food">
-            <h6>FOOD</h6>
-          </Link>
-          <span>John</span>
-          <Link to="/">
-            <span>Log out</span>
-          </Link>
-          <span className="write">
-            <Link to="write">Write</Link>
-          </span>
+    <nav className="px-4 py-2 border-b border-b-gray-300 flex justify-between items-center sticky top-0 bg-white w-full z-30">
+      <div className="flex gap-4 items-center justify-between w-1/2">
+        <Link to="/home">
+          <Logo />
+        </Link>
+        <div className="bg-gray-50 flex items-center justify-between rounded-3xl px-4 py-1">
+          <input
+            className="p-1 bg-transparent outline-none"
+            type="search"
+            placeholder="Search blog..."
+            id="search"
+          />
+          <label className="text-gray-500" htmlFor="search">
+            <BsSearch />
+          </label>
         </div>
       </div>
-    </div>
+      <div className="flex gap-4">
+        <Button link="/register" text="Register" />
+        <Button link="/login" primary={true} text="Login" />
+      </div>
+    </nav>
   );
 };
 

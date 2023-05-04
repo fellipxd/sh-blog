@@ -6,7 +6,7 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 import RootLayout from "./layouts/RootLayout";
-import Landing from "./pages/Landing";
+// import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Write from "./pages/Write";
@@ -18,7 +18,7 @@ const App = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route>
-        <Route index element={<Landing />} />
+        {/* <Route index element={<Landing />} /> */}
         <Route path="home" element={<RootLayout />}>
           <Route index element={<Home />} />
           <Route path="blog" element={<Single />} />

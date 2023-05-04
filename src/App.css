@@ -29,45 +29,6 @@ body {
   flex: 2;
 }
 
-/* navbar */
-
-/* .navbar {
-  max-width: 1024px;
-  display: flex;
-  justify-content: center;
-} */
-
-.container {
-  padding: 10px 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.logo img {
-  width: 120px;
-}
-
-.links {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-.navLink {
-  text-decoration: none;
-  color: inherit;
-}
-
-.links h6 {
-  font-size: 16px;
-  font-weight: 300;
-}
-
-.links span {
-  cursor: pointer;
-}
-
 .write {
   background: rgb(16, 202, 202);
   width: 50px;
