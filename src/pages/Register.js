@@ -5,11 +5,31 @@ const Register = () => {
   const [inputs, setInputs] = useState({
     username: "",
     email: "",
+    gender: "",
     password: "",
   });
   const handleChange = (e) => {
     setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    console.log("Clicked");
+
+    fetch("https://blog.shbootcamp.com.ng/signup.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(inputs),
+    }).then((res) => {
+      return res.json();
+    }).then((data) => {
+      console.log(data, inputs)
+    })
+  };
+
   return (
     <div className="tommy bg-gradient-to-br from-purple-600 to-purple-950">
       <h1 className="t-h1 text-white">Register</h1>
@@ -30,6 +50,12 @@ const Register = () => {
           className="t-input"
           onChange={handleChange}
         />
+        <select name="gender" onChange={handleChange} className="t-input">
+          <option value="">Select Gender</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Other</option>
+        </select>
         <input
           required
           type="password"
@@ -39,7 +65,7 @@ const Register = () => {
           onChange={handleChange}
         />
         <div className="text-center">
-          <Button link="/login" text="SIGNUP" />
+          <Button text="SIGNUP" onClick={handleSubmit} />
         </div>
         <p className="t-p">This is an error!</p>
         <span className="t-span">

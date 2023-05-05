@@ -1,8 +1,6 @@
 import { Link } from "react-router-dom";
 import Logo from "./Logo";
 import { BsSearch } from "react-icons/bs";
-import Register from "../pages/Register";
-import Login from "../pages/Login";
 import Button from "./Button";
 
 const Navbar = () => {

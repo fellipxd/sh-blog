@@ -10,13 +10,13 @@ const Single = () => {
         <img
           className=" w-full h-[300px] object-cover"
           src=""
-          alt="blog image"
+          alt="blog"
         />
         <div className=" flex items-center gap-[10px] text-[14px]">
           <img
             className=" w-[100px] h-[100px] rounded-full object-cover"
             src="https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8cGVyc29ufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=700&q=60"
-            alt="User image"
+            alt="User"
           />
           <div>
             <span className=" font-bold">John</span>
