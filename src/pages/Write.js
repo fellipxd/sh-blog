@@ -1,9 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import Button from "../components/Button";
+import { useNavigate } from "react-router";
 
 const Write = () => {
+  const user = sessionStorage.getItem("id");
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log("session", user);
+    if (!user) {
+      navigate("/");
+    }
+  }, [navigate]);
+
   const [value, setValue] = useState("");
   const user_id = sessionStorage.getItem("id");
   const [title, setTitle] = useState("");
@@ -17,7 +29,7 @@ const Write = () => {
 
     console.log("Clicked", dataObject);
 
-    fetch("https://blog.shbootcamp.com.ng/write_post.php", {
+    fetch("https://blog.shbootcamp.com.ng/writepost.php", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -33,7 +45,7 @@ const Write = () => {
   };
 
   return (
-    <div>
+    <div className="px-6">
       <div className="add">
         <div className="content">
           <input

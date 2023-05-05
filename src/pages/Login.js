@@ -1,8 +1,13 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Button from "../components/Button";
 
 const Login = () => {
+  const navigate = useNavigate();
+
+  const [errMessage, setErrMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+
   const [inputs, setInputs] = useState({
     email: "",
     password: "",
@@ -27,11 +32,24 @@ const Login = () => {
         return res.json();
       })
       .then((data) => {
-        const userId = data.user_id
-
-        sessionStorage.setItem("id", userId)
+        const userId = data.user_id;
+        const username = data.username;
 
         console.log(data, inputs);
+
+        if (data.status === "success") {
+          setTimeout(() => {
+            setSuccessMessage(data.message);
+            sessionStorage.setItem("id", userId);
+            sessionStorage.setItem("username", username);
+            navigate("/home");
+          }, 3000);
+        } else if (data.status === "error") {
+          setErrMessage(data.message);
+          setTimeout(() => {
+            setErrMessage("");
+          }, 3000);
+        }
       });
   };
 
@@ -56,7 +74,8 @@ const Login = () => {
         <div className="text-center">
           <Button onClick={handleSubmit} text="LOGIN" />
         </div>
-        <p className="t-p">This is an error!</p>
+        <p className="text-sm text-center text-red-600">{errMessage}</p>
+        <p className="text-sm text-center text-green-600">{successMessage}</p>
         <span className="t-span">
           Don't you have an account? <Link to="/register">Register</Link>
         </span>

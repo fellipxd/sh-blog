@@ -4,7 +4,7 @@ const Logo = () => {
   return (
     <div className="relative text-purple-700 flex flex-col justify-center items-center my-2">
       <BsJournalBookmarkFill className="text-3xl" />
-      <span className="text-[10px] font-bold">CHAPTERS</span>
+      <span className="text-md font-bold">CHAPTERS</span>
     </div>
   );
 };

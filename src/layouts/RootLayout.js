@@ -4,10 +4,10 @@ import Footer from "../components/Footer";
 
 const RootLayout = () => {
   return (
-    <div className="flex justify-center">
-      <div className="w-[1024px]">
+    <div className="flex justify-center w-full">
+      <div>
         <Navbar />
-        <div className="px-6">
+        <div className="w-full max-w-[1500px]">
           <Outlet />
         </div>
         <Footer />

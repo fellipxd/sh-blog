@@ -1,7 +1,12 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "../components/Button";
 const Register = () => {
+  const navigate = useNavigate()
+
+  const [errMessage, setErrMessage] = useState("")
+  const [successMessage, setSuccessMessage] = useState("")
+
   const [inputs, setInputs] = useState({
     username: "",
     email: "",
@@ -23,11 +28,30 @@ const Register = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(inputs),
-    }).then((res) => {
-      return res.json();
-    }).then((data) => {
-      console.log(data, inputs)
     })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        if (data.status === "error") {
+          setErrMessage(data.message);
+          setTimeout(() => {
+            setErrMessage("");
+          }, 3000);
+        } else {
+          setSuccessMessage(data.message);
+          setTimeout(() => {
+            navigate("/login");
+            setInputs({
+              username: "",
+              email: "",
+              gender: "",
+              password: "",
+            });
+          }, 3000);
+        }
+        console.log(data, inputs);
+      });
   };
 
   return (
@@ -67,7 +91,8 @@ const Register = () => {
         <div className="text-center">
           <Button text="SIGNUP" onClick={handleSubmit} />
         </div>
-        <p className="t-p">This is an error!</p>
+        <p className="text-sm text-center text-red-600">{errMessage}</p>
+        <p className="text-sm text-center text-green-600">{successMessage}</p>
         <span className="t-span">
           Do you have an account? <Link to="/login">Login</Link>
         </span>

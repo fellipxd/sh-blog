@@ -4,13 +4,15 @@ import { BsSearch } from "react-icons/bs";
 import Button from "./Button";
 
 const Navbar = () => {
+  const userId = sessionStorage.getItem("id");
+
   return (
-    <nav className="px-4 py-2 border-b border-b-gray-300 flex justify-between items-center sticky top-0 bg-white w-full z-30">
+    <nav className="px-4 py-2 border-b border-b-gray-300 flex flex-wrap justify-between items-center sticky top-0 bg-white w-full z-30">
       <div className="flex gap-4 items-center justify-between w-1/2">
-        <Link to="/home">
+        <Link to={!userId ? "/" : "/home"}>
           <Logo />
         </Link>
-        <div className="bg-gray-50 flex items-center justify-between rounded-3xl px-4 py-1">
+        <div className=" hidden bg-gray-50 md:flex items-center justify-between rounded-3xl px-4 py-1">
           <input
             className="p-1 bg-transparent outline-none"
             type="search"
@@ -22,10 +24,16 @@ const Navbar = () => {
           </label>
         </div>
       </div>
-      <div className="flex gap-4">
-        <Button link="/register" text="Register" />
-        <Button link="/login" primary={true} text="Login" />
-      </div>
+      {!userId ? (
+        <div className="flex gap-4">
+          <Button link="/register" text="Register" />
+          <Button link="/login" primary={true} text="Login" />
+        </div>
+      ) : (
+        <div className="flex gap-4">
+          <Button link="/write" text="Write Blog" />
+        </div>
+      )}
     </nav>
   );
 };
