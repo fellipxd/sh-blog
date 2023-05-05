@@ -3,7 +3,7 @@ import Button from "../components/Button";
 import { useEffect, useState } from "react";
 import { Tab } from "@headlessui/react";
 import { truncateText } from "../utils/truncateText";
-import {AiOutlineArrowDown} from "react-icons/ai"
+import { AiOutlineArrowDown } from "react-icons/ai";
 
 const Landing = () => {
   const [posts, setPosts] = useState([]);
@@ -15,9 +15,7 @@ const Landing = () => {
 
   useEffect(() => {
     async function blogs() {
-      const res = await fetch(
-        "https://blog.shbootcamp.com.ng/all_post.php"
-      );
+      const res = await fetch("https://blog.shbootcamp.com.ng/all_post.php");
       const data = await res.json();
       const blog = data.message.all_post;
       console.log(blog);
@@ -28,8 +26,8 @@ const Landing = () => {
 
   return (
     <>
-      <div className="w-full h-[90dvh] flex flex-col items-center justify-center gap-10 p-32 relative bg-gradient-to-br from-purple-600 to-purple-950">
-        <h1 className="text-3xl text-white">Welcome to</h1>
+      <div className="w-full h-[87dvh] flex flex-col items-center justify-center gap-10 p-32 relative bg-gradient-to-br from-purple-600 to-purple-950">
+        <h1 className="text-6xl font-bold text-black">Welcome to</h1>
         <span className="text-8xl text-white font-bold">CHAPTERS</span>
         <span className="text-3xl text-white absolute bottom-5 transition animate-bounce">
           <AiOutlineArrowDown />

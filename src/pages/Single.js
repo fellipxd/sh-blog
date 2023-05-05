@@ -1,6 +1,6 @@
 import { CiEdit } from "react-icons/ci";
 import { RiDeleteBin3Line } from "react-icons/ri";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 // import Menu from "../components/Menu";
 import { useEffect, useState } from "react";
 
@@ -8,22 +8,24 @@ const Single = () => {
   const [posts, setPosts] = useState("");
   // const [fetching, isFetching] = useState("");
 
-  const user = sessionStorage.getItem("id");
+  const { id } = useParams();
 
-  const userId = parseInt(user);
+  console.log(id);
+
+  // const user = sessionStorage.getItem("id");
+
+  // const userId = parseInt(user);
 
   useEffect(() => {
     async function blogs() {
-      const res = await fetch(
-        `https://blog.shbootcamp.com.ng/fetch_post.php?sessionId=${userId}`
-      );
+      const res = await fetch(`https://blog.shbootcamp.com.ng/fetch_post.php?id=${id}`);
       const data = await res.json();
       const blog = data.fetch_post.post;
       console.log(data, blog);
       setPosts(blog);
     }
     blogs();
-  }, [setPosts, userId]);
+  }, [setPosts, id]);
 
   return (
     <div className="px-6 flex gap-[50px]">
@@ -59,18 +61,14 @@ const Single = () => {
                   </span>
                 </div>
               </div>
-              <h1 className="text-4xl font-bold">
-                {post.blog_title}
-              </h1>
+              <h1 className="text-4xl font-bold">{post.blog_title}</h1>
               <div className="text-lg text-justify flex flex-col gap-2 ">
                 {post.body}
               </div>
             </div>
           ))}
       </div>
-      <div className="single-menu">
-        {/* <Menu /> */}
-      </div>
+      <div className="single-menu">{/* <Menu /> */}</div>
     </div>
   );
 };

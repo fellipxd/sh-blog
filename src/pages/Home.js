@@ -38,9 +38,10 @@ const Home = () => {
 
   return (
     <>
-      <div className="w-full h-[90dvh] flex flex-col items-center justify-center gap-10 p-32 relative bg-gradient-to-br from-purple-600 to-purple-950">
-        <h1 className="text-3xl text-white">Hi</h1>
-        <span className="text-6xl text-black font-bold">{username}</span>
+      <div className="w-full h-[87dvh] flex flex-col items-center justify-center gap-10 p-32 relative bg-gradient-to-br from-purple-600 to-purple-950">
+        <span className="text-6xl text-black font-bold">
+          Hello, {username}
+        </span>
         <span className="text-5xl text-white font-bold text-center">
           WELCOME TO CHAPTERS
         </span>
