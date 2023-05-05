@@ -4,10 +4,11 @@ import { useEffect, useState } from "react";
 import { Tab } from "@headlessui/react";
 import { truncateText } from "../utils/truncateText";
 import { AiOutlineArrowDown } from "react-icons/ai";
+import { getText } from "../utils/getText";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
-  const [fetching, isFetching] = useState("");
+  // const [fetching, isFetching] = useState("");
 
   const user = sessionStorage.getItem("id");
   const username = sessionStorage.getItem("username");
@@ -20,7 +21,7 @@ const Home = () => {
     if (!user) {
       navigate("/");
     }
-  }, [navigate]);
+  }, [navigate, user]);
 
   useEffect(() => {
     async function blogs() {
@@ -40,7 +41,9 @@ const Home = () => {
       <div className="w-full h-[90dvh] flex flex-col items-center justify-center gap-10 p-32 relative bg-gradient-to-br from-purple-600 to-purple-950">
         <h1 className="text-3xl text-white">Hi</h1>
         <span className="text-6xl text-black font-bold">{username}</span>
-        <span className="text-5xl text-white font-bold text-center">WELCOME TO CHAPTERS</span>
+        <span className="text-5xl text-white font-bold text-center">
+          WELCOME TO CHAPTERS
+        </span>
         <span className="text-3xl text-white absolute bottom-5 transition animate-bounce">
           <AiOutlineArrowDown />
         </span>
@@ -72,7 +75,9 @@ const Home = () => {
                         <Link to={`/blog${post.post_id}`}>
                           <h1 className="flex text-5xl">{post.blog_title}</h1>
                         </Link>
-                        <p className="text-lg">{truncateText(post.body)}</p>
+                        <p className="text-lg">
+                          {truncateText(getText(post.body))}
+                        </p>
                         <Button
                           link={`/blog/${post.post_id}`}
                           primary={true}

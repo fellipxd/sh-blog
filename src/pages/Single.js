@@ -1,12 +1,12 @@
 import { CiEdit } from "react-icons/ci";
 import { RiDeleteBin3Line } from "react-icons/ri";
 import { Link } from "react-router-dom";
-import Menu from "../components/Menu";
+// import Menu from "../components/Menu";
 import { useEffect, useState } from "react";
 
 const Single = () => {
   const [posts, setPosts] = useState("");
-  const [fetching, isFetching] = useState("");
+  // const [fetching, isFetching] = useState("");
 
   const user = sessionStorage.getItem("id");
 
@@ -48,7 +48,7 @@ const Single = () => {
                     <p>{post.date_publish}</p>
                   </div>
                   <span className="flex gap-2 -mt-4">
-                    <Link to={`/write`}>
+                    <Link to={`/write?edit=2`} state={post}>
                       {
                         <CiEdit className="text-2xl cursor-pointer hover:text-blue-600" />
                       }

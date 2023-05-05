@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Button from "../components/Button";
 import { useEffect, useState } from "react";
 import { Tab } from "@headlessui/react";
@@ -7,7 +7,7 @@ import {AiOutlineArrowDown} from "react-icons/ai"
 
 const Landing = () => {
   const [posts, setPosts] = useState([]);
-  const [fetching, isFetching] = useState("");
+  // const [fetching, isFetching] = useState("");
 
   const user = sessionStorage.getItem("id");
 

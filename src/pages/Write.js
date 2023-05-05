@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import Button from "../components/Button";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
+import axios from "axios";
+import moment from "moment";
 
 const Write = () => {
   const user = sessionStorage.getItem("id");
-
+  const state = useLocation().state;
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -14,34 +16,72 @@ const Write = () => {
     if (!user) {
       navigate("/");
     }
-  }, [navigate]);
-
-  const [value, setValue] = useState("");
+  }, [navigate, user]);
   const user_id = sessionStorage.getItem("id");
-  const [title, setTitle] = useState("");
-  const [picture, setPicture] = useState("");
-  const [tag, setTag] = useState("");
 
-  const dataObject = { user_id, title, picture, tag, value };
+  const [value, setValue] = useState(state?.desc || "");
+  const [title, setTitle] = useState(state?.title || "");
+  const [file, setFile] = useState(null);
+  const [tag, setTag] = useState(state?.tag || "");
 
-  const handleSubmit = (e) => {
+  const upload = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await axios.post("/upload", formData);
+      return res.data;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // const dataObject = { user_id, title, img: file, tag, desc: value };
+
+  const handleSubmit = async (e)  => {
     e.preventDefault();
 
-    console.log("Clicked", dataObject);
+    const imgUrl = await upload();
 
-    fetch("https://blog.shbootcamp.com.ng/writepost.php", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(dataObject),
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        console.log(data);
-      });
+    try {
+      // state
+      //   ? await axios.put(
+      //       `https://blog.shbootcamp.com.ng/writepost.php/${state.id}`,
+      //       {
+      //         user_id,
+      //         title,
+      //         desc: value,
+      //         tag,
+      //         img: file ? imgUrl : "",
+      //       }
+      //     )
+      //   : 
+        await axios.post(`https://blog.shbootcamp.com.ng/writepost.php`, {
+            user_id,
+            title,
+            desc: value,
+            tag,
+            img: file ? imgUrl : "",
+            date: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
+          });
+    } catch (err) {
+      console.log(err);
+    }
+
+    console.log("Clicked");
+
+    // fetch("https://blog.shbootcamp.com.ng/writepost.php", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify(dataObject),
+    // })
+    //   .then((res) => {
+    //     return res.json();
+    //   })
+    //   .then((data) => {
+    //     console.log(data);
+    //   });
   };
 
   return (
@@ -52,6 +92,7 @@ const Write = () => {
             className="p-[10px] border border-solid"
             type="text"
             name="title"
+            value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Title"
           />
@@ -76,8 +117,7 @@ const Write = () => {
             <input
               style={{ display: "none" }}
               type="file"
-              value={picture}
-              onChange={(e) => setPicture(e.target.value)}
+              onChange={(e) => setFile(e.target.files[0])}
               id="file"
             />
             <label htmlFor="file">Upload Image</label>
