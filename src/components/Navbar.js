@@ -47,7 +47,7 @@ const Navbar = () => {
           <span onClick={user}>{username}</span>
           <span
             onClick={logout}
-            className="font-bold hover:text-purple-700 cursor-pointer"
+            className=" border-l-2 pl-4 font-bold hover:text-purple-700 cursor-pointer"
           >
             Logout
           </span>
