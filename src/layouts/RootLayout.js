@@ -5,9 +5,9 @@ import Footer from "../components/Footer";
 const RootLayout = () => {
   return (
     <div className="flex justify-center w-full">
-      <div>
+      <div className="w-full">
         <Navbar />
-        <div className="w-full max-w-[1500px]">
+        <div className="w-full max-w-[1500px] mx-auto">
           <Outlet />
         </div>
         <Footer />

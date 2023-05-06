@@ -1,11 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "../components/Button";
+import { ToastContainer, toast } from "react-toastify";
 const Register = () => {
   const navigate = useNavigate()
-
-  const [errMessage, setErrMessage] = useState("")
-  const [successMessage, setSuccessMessage] = useState("")
 
   const [inputs, setInputs] = useState({
     username: "",
@@ -20,8 +18,6 @@ const Register = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    console.log("Clicked");
-
     fetch("https://blog.shbootcamp.com.ng/signup.php", {
       method: "POST",
       headers: {
@@ -34,12 +30,21 @@ const Register = () => {
       })
       .then((data) => {
         if (data.status === "error") {
-          setErrMessage(data.message);
-          setTimeout(() => {
-            setErrMessage("");
-          }, 3000);
+          toast.error(data.message, {
+            position: "bottom-right",
+            autoClose: 2000,
+            hideProgressBar: true,
+            pauseOnHover: true,
+            theme: "dark"
+          })
         } else {
-          setSuccessMessage(data.message);
+          toast.success(data.message, {
+            position: "bottom-right",
+            autoClose: 2000,
+            hideProgressBar: true,
+            pauseOnHover: true,
+            theme: "dark"
+          })
           setTimeout(() => {
             navigate("/login");
             setInputs({
@@ -50,14 +55,13 @@ const Register = () => {
             });
           }, 3000);
         }
-        console.log(data, inputs);
       });
   };
 
   return (
-    <div className="tommy bg-gradient-to-br from-purple-600 to-purple-950">
-      <h1 className="t-h1 text-white">Register</h1>
-      <form className="t-form">
+    <div className="tommy bg-gradient-to-br from-purple-600 to-purple-950 px-4">
+      <h1 className="text-white uppercase font-bold text-2xl mb-4">Register</h1>
+      <form className="flex flex-col gap-4 p-5 bg-white rounded-lg w-80">
         <input
           required
           type="text"
@@ -91,8 +95,7 @@ const Register = () => {
         <div className="text-center">
           <Button text="SIGNUP" onClick={handleSubmit} />
         </div>
-        <p className="text-sm text-center text-red-600">{errMessage}</p>
-        <p className="text-sm text-center text-green-600">{successMessage}</p>
+        <ToastContainer />
         <span className="t-span">
           Do you have an account? <Link to="/login">Login</Link>
         </span>

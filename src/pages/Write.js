@@ -3,32 +3,29 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import Button from "../components/Button";
 import { useLocation, useNavigate } from "react-router";
-import axios from "axios";
+import { toast } from "react-toastify";
 
 const Write = () => {
   const user = sessionStorage.getItem("id");
-  // const state = useLocation().state;
+
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("session", user);
     if (!user) {
       navigate("/");
     }
   }, [navigate, user]);
 
-  const state = useLocation().state
+  const state = useLocation().state;
 
   const user_id = sessionStorage.getItem("id");
-  const [value, setValue] = useState(state?.body ||"");
+  const [value, setValue] = useState(state?.body || "");
   const [title, setTitle] = useState(state?.blog_title || "");
-  const [file, setFile] = useState(null);
+  const [picture, setPicture] = useState(null);
   const [tag, setTag] = useState(state?.tags || "");
 
-  console.log("Clicked");
-
   const handleUpdate = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     const data = { user_id, title, tag, value };
 
@@ -43,39 +40,44 @@ const Write = () => {
         return res.json();
       })
       .then((data) => {
-        console.log(data);
+        if (data.status === "success") {
+          toast.success(data.message, {
+            position: "bottom-right",
+            autoClose: 2000,
+            hideProgressBar: true,
+            pauseOnHover: true,
+            theme: "dark",
+          });
+        } else {
+          toast.error(data.message, {
+            position: "bottom-right",
+            autoClose: 2000,
+            hideProgressBar: true,
+            pauseOnHover: true,
+            theme: "dark",
+          });
+        }
+      })
+      .catch((err) => {
+        toast.warning(err.message, {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: true,
+          pauseOnHover: true,
+          theme: "dark",
+        });
       });
+  };
 
-  }
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    const upload = async () => {
-      try {
-        const formData = new FormData();
-        formData.append("file", file);
-        const res = await axios.post(
-          "https://blog.shbootcamp.com.ng/write_post.php",
-          formData
-        );
-        return res.data;
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    upload();
-
-    const picture = await file.name;
-
     const data = { user_id, title, picture, tag, value };
-
-    console.log("Clicked", data);
 
     fetch("https://blog.shbootcamp.com.ng/write_post.php", {
       method: "POST",
       headers: {
-        "Content-Type": "multipart/form-data",
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
     })
@@ -83,14 +85,39 @@ const Write = () => {
         return res.json();
       })
       .then((data) => {
-        console.log(data);
+        if (data.status === "success") {
+          toast.success(data.message, {
+            position: "bottom-right",
+            autoClose: 2000,
+            hideProgressBar: true,
+            pauseOnHover: true,
+            theme: "dark",
+          });
+        } else {
+          toast.error(data.message, {
+            position: "bottom-right",
+            autoClose: 2000,
+            hideProgressBar: true,
+            pauseOnHover: true,
+            theme: "dark",
+          });
+        }
+      })
+      .catch((err) => {
+        toast.warning(err.message, {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: true,
+          pauseOnHover: true,
+          theme: "dark",
+        });
       });
   };
 
   return (
     <div className="px-6">
-      <div className="add">
-        <div className="content">
+      <div className="add mt-5 flex md:flex-row flex-col gap-5">
+        <div className="content flex gap-5 flex-col">
           <input
             className="p-[10px] border border-solid"
             type="text"
@@ -121,7 +148,7 @@ const Write = () => {
               style={{ display: "none" }}
               type="file"
               name=""
-              onChange={(e) => setFile(e.target.files[0])}
+              onChange={(e) => setPicture(e.target.files[0])}
               id="file"
             />
             <label htmlFor="file">Upload Image</label>

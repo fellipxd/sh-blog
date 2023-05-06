@@ -20,14 +20,15 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="px-4 py-2 border-b border-b-gray-300 flex flex-wrap justify-between items-center sticky top-0 bg-white w-full z-30">
-      <div className="flex gap-4 items-center justify-between w-1/2">
+    <nav className="px-4 py-2 border-b border-b-gray-300 flex justify-between gap-4 items-center sticky top-0 bg-white w-full z-30  mx-auto max-w-[1500px]">
+      <div>
         <Link to={!userId ? "/" : "/home"}>
           <Logo />
         </Link>
-        <div className=" hidden bg-gray-50 md:flex items-center justify-between rounded-3xl px-4 py-1">
+      </div>
+      <div className=" bg-gray-50 flex items-center justify-center md:justify-between rounded-full w-12 h-12 md:h-auto md:rounded-3xl md:px-4 md:py-1 md:w-1/2">
           <input
-            className="p-1 bg-transparent outline-none"
+            className="p-1 bg-transparent outline-none md:block hidden"
             type="search"
             placeholder="Search blog..."
             id="search"
@@ -36,7 +37,6 @@ const Navbar = () => {
             <BsSearch />
           </label>
         </div>
-      </div>
       {!userId ? (
         <div className="flex gap-4">
           <Button link="/register" text="Register" />
