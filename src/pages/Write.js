@@ -3,10 +3,11 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import Button from "../components/Button";
 import { useNavigate } from "react-router";
+import axios from "axios";
 
 const Write = () => {
   const user = sessionStorage.getItem("id");
-
+  // const state = useLocation().state;
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -14,27 +15,46 @@ const Write = () => {
     if (!user) {
       navigate("/");
     }
-  }, [navigate]);
+  }, [navigate, user]);
 
-  const [value, setValue] = useState("");
   const user_id = sessionStorage.getItem("id");
+  const [value, setValue] = useState("");
   const [title, setTitle] = useState("");
-  const [picture, setPicture] = useState("");
+  const [file, setFile] = useState(null);
   const [tag, setTag] = useState("");
 
-  const dataObject = { user_id, title, picture, tag, value };
+  console.log("Clicked");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("Clicked", dataObject);
+    const upload = async () => {
+      try {
+        const formData = new FormData();
+        formData.append("file", file);
+        const res = await axios.post(
+          "https://blog.shbootcamp.com.ng/write_post.php",
+          formData
+        );
+        return res.data;
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    upload();
 
-    fetch("https://blog.shbootcamp.com.ng/writepost.php", {
+    const picture = await file.name;
+
+    const data = { user_id, title, picture, tag, value };
+
+    console.log("Clicked", data);
+
+    fetch("https://blog.shbootcamp.com.ng/write_post.php", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "multipart/form-data",
       },
-      body: JSON.stringify(dataObject),
+      body: JSON.stringify(data),
     })
       .then((res) => {
         return res.json();
@@ -52,6 +72,7 @@ const Write = () => {
             className="p-[10px] border border-solid"
             type="text"
             name="title"
+            value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Title"
           />
@@ -59,7 +80,6 @@ const Write = () => {
             <ReactQuill
               className="h-full border-b border-b-solid"
               theme="snow"
-              value={value}
               onChange={setValue}
             />
           </div>
@@ -76,8 +96,8 @@ const Write = () => {
             <input
               style={{ display: "none" }}
               type="file"
-              value={picture}
-              onChange={(e) => setPicture(e.target.value)}
+              name=""
+              onChange={(e) => setFile(e.target.files[0])}
               id="file"
             />
             <label htmlFor="file">Upload Image</label>
