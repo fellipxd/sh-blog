@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import Button from "../components/Button";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import axios from "axios";
 
 const Write = () => {
@@ -17,13 +17,36 @@ const Write = () => {
     }
   }, [navigate, user]);
 
+  const state = useLocation().state
+
   const user_id = sessionStorage.getItem("id");
-  const [value, setValue] = useState("");
-  const [title, setTitle] = useState("");
+  const [value, setValue] = useState(state?.body ||"");
+  const [title, setTitle] = useState(state?.blog_title || "");
   const [file, setFile] = useState(null);
-  const [tag, setTag] = useState("");
+  const [tag, setTag] = useState(state?.tags || "");
 
   console.log("Clicked");
+
+  const handleUpdate = async (e) => {
+    e.preventDefault()
+
+    const data = { user_id, title, tag, value };
+
+    fetch("https://blog.shbootcamp.com.ng/edit_post.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        console.log(data);
+      });
+
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -80,6 +103,7 @@ const Write = () => {
             <ReactQuill
               className="h-full border-b border-b-solid"
               theme="snow"
+              value={value}
               onChange={setValue}
             />
           </div>
@@ -102,7 +126,7 @@ const Write = () => {
             />
             <label htmlFor="file">Upload Image</label>
             <div className="flex justify-between mt-2">
-              <Button primary={true} text="Update" />
+              <Button primary={true} text="Update" onClick={handleUpdate} />
               <Button text="Save blog" onClick={handleSubmit} />
             </div>
           </div>

@@ -39,9 +39,9 @@ const Home = () => {
 
   return (
     <>
-      <Welcome primary={true} text={`Hello, ${username}`} text2="WELCOME TO CHAPTERS" />
+      <Welcome id="blogs" primary={true} text={`Hello, ${username}`} text2="WELCOME TO CHAPTERS" />
       <div className="px-6">
-        <Tab.Group>
+        <Tab.Group  id="blogs">
           {/* <Tab.List>
           <Tab>All</Tab>
           <Tab>Tab 2</Tab>
