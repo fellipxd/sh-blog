@@ -3,6 +3,7 @@ import { RiDeleteBin3Line } from "react-icons/ri";
 import { Link, useParams } from "react-router-dom";
 // import Menu from "../components/Menu";
 import { useEffect, useState } from "react";
+import Picture from "../img/marguerite-729510__340.jpg";
 
 const Single = () => {
   const [posts, setPosts] = useState("");
@@ -34,8 +35,8 @@ const Single = () => {
           posts.map((post) => (
             <div className="single-content flex flex-col gap-[30px]">
               <img
-                className=" w-full h-[300px] object-cover"
-                src={post.blog_picture}
+                className="w-full h-[400px] object-cover"
+                src={post.blog_picture ? post.blog_picture : Picture}
                 alt="blog"
               />
               <div className=" flex items-center gap-[10px] text-[14px]">

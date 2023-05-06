@@ -3,8 +3,9 @@ import Button from "../components/Button";
 import { useEffect, useState } from "react";
 import { Tab } from "@headlessui/react";
 import { truncateText } from "../utils/truncateText";
-import { AiOutlineArrowDown } from "react-icons/ai";
 import { getText } from "../utils/getText";
+import Picture from "../img/marguerite-729510__340.jpg";
+import Welcome from "../components/Welcome";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -38,17 +39,7 @@ const Home = () => {
 
   return (
     <>
-      <div className="w-full h-[87dvh] flex flex-col items-center justify-center gap-10 p-32 relative bg-gradient-to-br from-purple-600 to-purple-950">
-        <span className="text-6xl text-black font-bold">
-          Hello, {username}
-        </span>
-        <span className="text-5xl text-white font-bold text-center">
-          WELCOME TO CHAPTERS
-        </span>
-        <span className="text-3xl text-white absolute bottom-5 transition animate-bounce">
-          <AiOutlineArrowDown />
-        </span>
-      </div>
+      <Welcome primary={true} text={`Hello, ${username}`} text2="WELCOME TO CHAPTERS" />
       <div className="px-6">
         <Tab.Group>
           {/* <Tab.List>
@@ -65,13 +56,16 @@ const Home = () => {
                       className="odd:flex-row-reverse flex gap-[100px]"
                       key={post.post_id}
                     >
-                      {/* <div className="post-img relative after:content-[''] after:w-full after:h-full after:bg-gray-100 after:absolute after:top-5 after:-left-5 after:-z-[1]">
-              <img
-                className="w-full max-h-[400px] object-cover"
-                src={post.img}
-                alt=""
-              />
-            </div> */}
+                      <div className="post-img">
+                        {" "}
+                        <div className="relative after:content-[''] after:w-full after:h-full after:bg-purple-300 after:absolute after:top-5 after:-left-5 after:-z-[1]">
+                          <img
+                            className="w-full max-h-[400px] object-cover"
+                            src={post.img ? post.img : Picture}
+                            alt=""
+                          />
+                        </div>
+                      </div>
                       <div className="post-content flex flex-col justify-between">
                         <Link to={`/blog${post.post_id}`}>
                           <h1 className="flex text-5xl">{post.blog_title}</h1>

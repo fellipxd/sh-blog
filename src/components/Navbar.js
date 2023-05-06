@@ -9,6 +9,10 @@ const Navbar = () => {
 
   const navigate = useNavigate();
 
+  const user = () => {
+    navigate("/user")
+  }
+
   const logout = () => {
     sessionStorage.clear("username");
     sessionStorage.clear("id");
@@ -40,7 +44,7 @@ const Navbar = () => {
         </div>
       ) : (
         <div className="flex items-center gap-4">
-          <span>{username}</span>
+          <span onClick={user}>{username}</span>
           <span
             onClick={logout}
             className="font-bold hover:text-purple-700 cursor-pointer"

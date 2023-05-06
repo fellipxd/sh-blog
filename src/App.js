@@ -13,6 +13,7 @@ import Write from "./pages/Write";
 import Register from "./pages/Register";
 import "./tommy.css";
 import Single from "./pages/Single";
+import UserProfile from "./pages/UserProfile";
 
 const App = () => {
   const router = createBrowserRouter(
@@ -23,6 +24,7 @@ const App = () => {
           <Route path="home" element={<Home />} />
           <Route path="blog/:id" element={<Single />} />
           <Route path="write" element={<Write />} />
+          <Route path="user" element={<UserProfile />} />
         </Route>
         <Route path="register" element={<Register />} />
         <Route path="login" element={<Login />} />
