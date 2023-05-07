@@ -30,6 +30,7 @@ const Home = () => {
       const data = await res.json();
       if (data.status === "success") {
         const blog = data.message.all_post;
+        console.log(blog)
         setPosts(blog);
         setFetching("")
       } else {
@@ -73,8 +74,8 @@ const Home = () => {
                       <div className="post-img">
                         <div className="relative after:content-[''] after:w-full after:h-full after:bg-purple-300 after:absolute after:top-5 after:-left-5 after:-z-[1]">
                           <img
-                            className="w-full max-h-[400px] object-cover"
-                            src={post.img ? post.img : Picture}
+                            className="w-full max-h-[400px] object-cover border-[20px] border-purple-400"
+                            src={post.blog_picture ? `https://blog.shbootcamp.com.ng/${post.blog_picture}` : Picture}
                             alt=""
                           />
                         </div>

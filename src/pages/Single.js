@@ -37,6 +37,23 @@ const Single = () => {
     } else {
       setCount(count - 1);
     }
+
+    const likeData = { id, user_id, count };
+
+    fetch("https://blog.shbootcamp.com.ng/like.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(likeData),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        console.log(data)
+      });
+    
   };
 
   useEffect(() => {
@@ -45,6 +62,7 @@ const Single = () => {
         `https://blog.shbootcamp.com.ng/fetch_post.php?id=${id}`
       );
       const data = await res.json();
+      console.log(data);
       const blog = data.fetch_post.post;
       setPosts(blog);
       setPost(blog);
@@ -78,8 +96,8 @@ const Single = () => {
           });
         } else {
           navigate(`/write?edit=${id}`, {
-            state:{post}
-          })
+            state: { post },
+          });
         }
       });
   };
@@ -178,6 +196,40 @@ const Single = () => {
     comments();
   }, [id]);
 
+  // const addLike = () => {
+  //   const likeData = { id, user_id, count };
+
+  //   fetch("https://blog.shbootcamp.com.ng/like.php", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(likeData),
+  //   })
+  //     .then((res) => {
+  //       return res.json();
+  //     })
+  //     .then((data) => {
+  //       if (data.status === "success") {
+  //         toast.success(data.message, {
+  //           hideProgressBar: true,
+  //           autoClose: 2000,
+  //           position: "bottom-right",
+  //           theme: "dark",
+  //           pauseOnHover: true,
+  //         });
+  //       } else {
+  //         toast.error(data.message, {
+  //           hideProgressBar: true,
+  //           autoClose: 2000,
+  //           position: "bottom-right",
+  //           theme: "dark",
+  //           pauseOnHover: true,
+  //         });
+  //       }
+  //     });
+  // };
+
   useEffect(() => {
     async function postByTags() {
       const res = await fetch(
@@ -202,7 +254,11 @@ const Single = () => {
               <div className="single-content flex flex-col gap-[30px]">
                 <img
                   className="w-full h-80 md:h-[400px] object-cover"
-                  src={post.blog_picture ? post.blog_picture : Picture}
+                  src={
+                    post.blog_picture
+                      ? `https://blog.shbootcamp.com.ng/${post.blog_picture}`
+                      : Picture
+                  }
                   alt="blog"
                 />
                 <div className="flex items-center gap-[10px] text-[14px]">
@@ -227,9 +283,9 @@ const Single = () => {
                   </h1>
                   <span className="flex gap-2 -mt-4">
                     <span onClick={editPost}>
-                        {
-                          <CiEdit className="text-2xl md:text-3xl cursor-pointer hover:text-blue-600" />
-                        }
+                      {
+                        <CiEdit className="text-2xl md:text-3xl cursor-pointer hover:text-blue-600" />
+                      }
                     </span>
                     <span onClick={deletePost}>
                       {
@@ -293,23 +349,29 @@ const Single = () => {
           ))}
       </div>
       <div className=" pt-2 border-t md:border-l md:border-t-0 md:pl-4 single-menu">
-        <div className="flex flex-col gap-[25px]">
-          <h1 className="text-lg font-semibold uppercase">
-            Other posts you may like
-          </h1>
-          {tagPosts &&
-            tagPosts.map((post) => (
-              <div className="flex flex-col gap-[10px]" key={post.id}>
+        {tagPosts &&
+          tagPosts.filter((post) => (
+            id !== post.post_id
+          )).map((post) => (
+            <div className="flex flex-col gap-[25px]">
+              <h1 className="text-lg font-semibold uppercase">
+                Other posts you may like
+              </h1>
+              <div className="flex flex-col gap-[10px]" key={post.post_id}>
                 <img
                   className="w-full h-[200px] object-cover"
-                  src={post.blog_picture ? post.blog_picture : Picture}
+                  src={
+                    post.blog_picture
+                      ? `https://blog.shbootcamp.com.ng/${post.blog_picture}`
+                      : Picture
+                  }
                   alt=""
                 />
                 <h2 className="text-xl">{post.blog_title}</h2>
                 <Button primary={true} text="Read More" />
               </div>
-            ))}
-        </div>
+            </div>
+          ))}
       </div>
     </div>
   );

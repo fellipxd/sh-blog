@@ -22,111 +22,151 @@ const Write = () => {
 
   const user_id = sessionStorage.getItem("id");
   const [value, setValue] = useState(state?.post[0].body || "");
-  const [title, setTitle] = useState(state?.post[0].blog_title || "");
-  const [picture, setPicture] = useState(null);
-  const [tag, setTag] = useState(state?.post[0].tags || "");
+  const [blogData, setBlogData] = useState({
+    title: state?.post[0].blog_title || "",
+    tag: state?.post[0].tags || "",
+    picture: null,
+  });
 
-  const handleUpdate = (e) => {
-    e.preventDefault();
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
 
-    const data = { post_id, user_id, title, tag, value };
-
-    fetch("https://blog.shbootcamp.com.ng/edit_post.php", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        console.log(data);
-        if (data.status === "success") {
-          toast.success(data.message, {
-            position: "bottom-right",
-            autoClose: 2000,
-            hideProgressBar: true,
-            pauseOnHover: true,
-            theme: "dark",
-          });
-          setValue("");
-          setTitle("");
-          setTag("");
-          setTimeout(() => {
-            navigate("/home");
-          }, 3000);
-        } else {
-          toast.error(data.message, {
-            position: "bottom-right",
-            autoClose: 2000,
-            hideProgressBar: true,
-            pauseOnHover: true,
-            theme: "dark",
-          });
-        }
-      })
-      .catch((err) => {
-        toast.warning(err.message, {
-          position: "bottom-right",
-          autoClose: 2000,
-          hideProgressBar: true,
-          pauseOnHover: true,
-          theme: "dark",
-        });
-      });
+    setBlogData((prevBlogData) => ({
+      ...prevBlogData,
+      [name]: value,
+    }));
   };
 
-  const handleSubmit = (e) => {
+  const handleFileInputChange = (e) => {
+    const file = e.target.files[0];
+
+    setBlogData((prevBlogData) => ({
+      ...prevBlogData,
+      picture: file,
+    }));
+  };
+
+  const handleUpdate = async (e) => {
     e.preventDefault();
 
-    const data = { title, picture, tag, value };
+    const title = blogData.title
+    const tag = blogData.tag
 
-    fetch(`https://blog.shbootcamp.com.ng/write_post.php?user_id=${user_id}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        if (data.status === "success") {
-          toast.success(data.message, {
-            position: "bottom-right",
-            autoClose: 2000,
-            hideProgressBar: true,
-            pauseOnHover: true,
-            theme: "dark",
-          });
-          setValue("");
-          setTitle("");
-          setTag("");
-          setTimeout(() => {
-            navigate("/home");
-          }, 3000);
-        } else {
-          toast.error(data.message, {
-            position: "bottom-right",
-            autoClose: 2000,
-            hideProgressBar: true,
-            pauseOnHover: true,
-            theme: "dark",
-          });
+    const editData = {user_id, post_id, title, value, tag}
+
+    console.log(editData)
+
+    try {
+      const res = await fetch(
+        `https://blog.shbootcamp.com.ng/edit_post.php`,
+        {
+          method: "POST",
+          body: editData,
         }
-      })
-      .catch((err) => {
-        toast.warning(err.message, {
+      );
+
+      const { status, message } = await res.json();
+
+      if (status === "success") {
+        console.log(message);
+
+        toast.success(message, {
           position: "bottom-right",
           autoClose: 2000,
           hideProgressBar: true,
           pauseOnHover: true,
           theme: "dark",
         });
+        setBlogData({
+          title: "",
+          value: "",
+          tag: "",
+        });
+        setTimeout(() => {
+          navigate("/home");
+        }, 3000);
+      } else {
+        toast.error(message, {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: true,
+          pauseOnHover: true,
+          theme: "dark",
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(error, {
+        position: "bottom-right",
+        autoClose: 2000,
+        hideProgressBar: true,
+        pauseOnHover: true,
+        theme: "dark",
       });
+    }
+  };
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+
+    formData.append("title", blogData.title);
+    formData.append("value", value);
+    formData.append("tag", blogData.tag);
+    formData.append("picture", blogData.picture);
+
+    console.log(formData)
+
+    try {
+      const res = await fetch(
+        `https://blog.shbootcamp.com.ng/write_post.php?user_id=${user_id}`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      const { status, message } = await res.json();
+
+      if (status === "success") {
+        console.log(message);
+
+        toast.success(message, {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: true,
+          pauseOnHover: true,
+          theme: "dark",
+        });
+        setBlogData({
+          title: "",
+          value: "",
+          tag: "",
+        });
+        setTimeout(() => {
+          navigate("/home");
+        }, 3000);
+      } else {
+        toast.error(message, {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: true,
+          pauseOnHover: true,
+          theme: "dark",
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(error, {
+        position: "bottom-right",
+        autoClose: 2000,
+        hideProgressBar: true,
+        pauseOnHover: true,
+        theme: "dark",
+      });
+    }
   };
 
   return (
@@ -138,28 +178,31 @@ const Write = () => {
             className="p-[10px] border border-solid"
             type="text"
             name="title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            value={blogData.title}
+            onChange={handleInputChange}
             placeholder="Title"
           />
           <div className="h-[300px] overflow-scroll">
             <ReactQuill
               className="h-full border-b border-b-solid"
               theme="snow"
+              name="value"
               value={value}
               onChange={setValue}
             />
           </div>
         </div>
         <div className="menu">
-          <div className="item p-[10px] flex flex-row md:flex-col text-[12px] justify-between ">
+          <div className="item p-[10px] flex flex-row md:flex-col items-center md:items-start text-[12px] justify-between ">
             <div>
               <h1>Publish</h1>
+            </div>
+            <div>
               <input
                 style={{ display: "none" }}
                 type="file"
-                name=""
-                onChange={(e) => setPicture(e.target.files[0])}
+                name="picture"
+                onChange={handleFileInputChange}
                 id="file"
               />
               <label htmlFor="file">Upload Image</label>
@@ -181,10 +224,10 @@ const Write = () => {
             <div className="cat">
               <input
                 type="radio"
-                name="cat"
-                checked={tag === "art"}
-                onChange={() => setTag("art")}
+                name="tag"
+                checked={blogData.tag === "art"}
                 value="art"
+                onChange={handleInputChange}
                 id="art"
               />
               <label htmlFor="art">Art</label>
@@ -192,10 +235,10 @@ const Write = () => {
             <div className="cat">
               <input
                 type="radio"
-                name="cat"
-                checked={tag === "science"}
-                onChange={() => setTag("science")}
-                value="art"
+                name="tag"
+                checked={blogData.tag === "science"}
+                value="science"
+                onChange={handleInputChange}
                 id="science"
               />
               <label htmlFor="science">Science</label>
@@ -203,10 +246,10 @@ const Write = () => {
             <div className="cat">
               <input
                 type="radio"
-                name="cat"
-                checked={tag === "technology"}
-                onChange={() => setTag("technology")}
-                value="art"
+                name="tag"
+                checked={blogData.tag === "technology"}
+                value="technology"
+                onChange={handleInputChange}
                 id="technology"
               />
               <label htmlFor="technology">Technology</label>
@@ -214,10 +257,10 @@ const Write = () => {
             <div className="cat">
               <input
                 type="radio"
-                name="cat"
-                checked={tag === "cinema"}
-                onChange={() => setTag("cinema")}
-                value="art"
+                name="tag"
+                checked={blogData.tag === "cinema"}
+                value="cinema"
+                onChange={handleInputChange}
                 id="cinema"
               />
               <label htmlFor="cinema">Cinema</label>
@@ -225,10 +268,10 @@ const Write = () => {
             <div className="cat">
               <input
                 type="radio"
-                name="cat"
-                checked={tag === "design"}
-                onChange={() => setTag("design")}
-                value="art"
+                name="tag"
+                checked={blogData.tag === "design"}
+                value="design"
+                onChange={handleInputChange}
                 id="design"
               />
               <label htmlFor="design">Design</label>
@@ -236,10 +279,10 @@ const Write = () => {
             <div className="cat">
               <input
                 type="radio"
-                name="cat"
-                checked={tag === "food"}
-                onChange={() => setTag("food")}
-                value="art"
+                name="tag"
+                checked={blogData.tag === "food"}
+                value="food"
+                onChange={handleInputChange}
                 id="food"
               />
               <label htmlFor="food">Food</label>
