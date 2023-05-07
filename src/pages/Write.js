@@ -3,7 +3,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import Button from "../components/Button";
 import { useLocation, useNavigate } from "react-router";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 
 const Write = () => {
   const user = sessionStorage.getItem("id");
@@ -12,11 +12,13 @@ const Write = () => {
 
   useEffect(() => {
     if (!user) {
-      navigate("/");
+      navigate("/login");
     }
   }, [navigate, user]);
 
   const state = useLocation().state;
+
+  const post_id = state?.post_id;
 
   const user_id = sessionStorage.getItem("id");
   const [value, setValue] = useState(state?.body || "");
@@ -24,15 +26,15 @@ const Write = () => {
   const [picture, setPicture] = useState(null);
   const [tag, setTag] = useState(state?.tags || "");
 
-  const handleUpdate = async (e) => {
+  const handleUpdate = (e) => {
     e.preventDefault();
 
-    const data = { user_id, title, tag, value };
+    const data = { post_id, user_id, title, tag, value };
 
     fetch("https://blog.shbootcamp.com.ng/edit_post.php", {
       method: "POST",
       headers: {
-        "Content-Type": "multipart/form-data",
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
     })
@@ -40,6 +42,7 @@ const Write = () => {
         return res.json();
       })
       .then((data) => {
+        console.log(data);
         if (data.status === "success") {
           toast.success(data.message, {
             position: "bottom-right",
@@ -48,6 +51,12 @@ const Write = () => {
             pauseOnHover: true,
             theme: "dark",
           });
+          setValue("");
+          setTitle("");
+          setTag("");
+          setTimeout(() => {
+            navigate("/home");
+          }, 3000);
         } else {
           toast.error(data.message, {
             position: "bottom-right",
@@ -72,9 +81,9 @@ const Write = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const data = { user_id, title, picture, tag, value };
+    const data = { title, picture, tag, value };
 
-    fetch("https://blog.shbootcamp.com.ng/write_post.php", {
+    fetch(`https://blog.shbootcamp.com.ng/write_post.php?user_id=${user_id}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -93,6 +102,12 @@ const Write = () => {
             pauseOnHover: true,
             theme: "dark",
           });
+          setValue("");
+          setTitle("");
+          setTag("");
+          setTimeout(() => {
+            navigate("/home");
+          }, 3000);
         } else {
           toast.error(data.message, {
             position: "bottom-right",
@@ -116,6 +131,7 @@ const Write = () => {
 
   return (
     <div className="px-6">
+      <ToastContainer />
       <div className="add mt-5 flex md:flex-row flex-col gap-5">
         <div className="content flex gap-5 flex-col">
           <input
@@ -136,28 +152,31 @@ const Write = () => {
           </div>
         </div>
         <div className="menu">
-          <div className="item">
-            <h1>Publish</h1>
-            <span>
-              <b>Status:</b> Draft
-            </span>
-            <span>
-              <b>Visibility:</b> Public
-            </span>
-            <input
-              style={{ display: "none" }}
-              type="file"
-              name=""
-              onChange={(e) => setPicture(e.target.files[0])}
-              id="file"
-            />
-            <label htmlFor="file">Upload Image</label>
+          <div className="item p-[10px] flex flex-row md:flex-col text-[12px] justify-between ">
+            <div>
+              <h1>Publish</h1>
+              <input
+                style={{ display: "none" }}
+                type="file"
+                name=""
+                onChange={(e) => setPicture(e.target.files[0])}
+                id="file"
+              />
+              <label htmlFor="file">Upload Image</label>
+            </div>
             <div className="flex justify-between mt-2">
-              <Button primary={true} text="Update" onClick={handleUpdate} />
-              <Button text="Save blog" onClick={handleSubmit} />
+              {!state ? (
+                <Button text="Save blog" onClick={handleSubmit} />
+              ) : (
+                <Button
+                  primary={true}
+                  text="Update Blog"
+                  onClick={handleUpdate}
+                />
+              )}
             </div>
           </div>
-          <div className="item">
+          <div className="item p-[10px] flex flex-col text-[12px] justify-between ">
             <h1>Category</h1>
             <div className="cat">
               <input

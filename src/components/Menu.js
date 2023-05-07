@@ -29,6 +29,16 @@ const Menu = () => {
     },
   ];
 
+  // useEffect(() => {
+  //   async function comments() {
+  //     const res = await fetch(
+  //       "https://blog.shbootcamp.com.ng/tag_post.php"
+  //     );
+  //     const data = await res.json();
+  //   }
+  //   comments();
+  // }, []);
+
   return (
     <div className="flex flex-col gap-[25px]">
       <h1>Other posts you may like</h1>
