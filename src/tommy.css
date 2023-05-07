@@ -9,18 +9,7 @@
     padding: 10px;
     border-bottom: 1px solid gray;
 }
-.t-h1{
-    font-size: 20px;
-    margin-bottom: 20px;
-}
-.t-form{
-    display: flex;
-    flex-direction: column;
-    padding: 50px;
-    background-color: white;
-    width: 300px;
-    gap: 20px;
-}
+
 .t-btn{
     padding: 10px;
     background-color: teal;

@@ -3,142 +3,231 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import Button from "../components/Button";
 import { useLocation, useNavigate } from "react-router";
-import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
 
 const Write = () => {
   const user = sessionStorage.getItem("id");
-  // const state = useLocation().state;
+
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("session", user);
     if (!user) {
-      navigate("/");
+      navigate("/login");
     }
   }, [navigate, user]);
 
-  const state = useLocation().state
+  const state = useLocation().state;
+
+  const post_id = state?.post[0].post_id;
 
   const user_id = sessionStorage.getItem("id");
-  const [value, setValue] = useState(state?.body ||"");
-  const [title, setTitle] = useState(state?.blog_title || "");
-  const [file, setFile] = useState(null);
-  const [tag, setTag] = useState(state?.tags || "");
+  const [value, setValue] = useState(state?.post[0].body || "");
+  const [blogData, setBlogData] = useState({
+    title: state?.post[0].blog_title || "",
+    tag: state?.post[0].tags || "",
+    picture: null,
+  });
 
-  console.log("Clicked");
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+
+    setBlogData((prevBlogData) => ({
+      ...prevBlogData,
+      [name]: value,
+    }));
+  };
+
+  const handleFileInputChange = (e) => {
+    const file = e.target.files[0];
+
+    setBlogData((prevBlogData) => ({
+      ...prevBlogData,
+      picture: file,
+    }));
+  };
 
   const handleUpdate = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    const data = { user_id, title, tag, value };
+    const title = blogData.title
+    const tag = blogData.tag
 
-    fetch("https://blog.shbootcamp.com.ng/edit_post.php", {
-      method: "POST",
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        console.log(data);
+    const editData = {user_id, post_id, title, value, tag}
+
+    console.log(editData)
+
+    try {
+      const res = await fetch(
+        `https://blog.shbootcamp.com.ng/edit_post.php`,
+        {
+          method: "POST",
+          body: editData,
+        }
+      );
+
+      const { status, message } = await res.json();
+
+      if (status === "success") {
+        console.log(message);
+
+        toast.success(message, {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: true,
+          pauseOnHover: true,
+          theme: "dark",
+        });
+        setBlogData({
+          title: "",
+          value: "",
+          tag: "",
+        });
+        setTimeout(() => {
+          navigate("/home");
+        }, 3000);
+      } else {
+        toast.error(message, {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: true,
+          pauseOnHover: true,
+          theme: "dark",
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(error, {
+        position: "bottom-right",
+        autoClose: 2000,
+        hideProgressBar: true,
+        pauseOnHover: true,
+        theme: "dark",
       });
+    }
+  };
 
-  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const upload = async () => {
-      try {
-        const formData = new FormData();
-        formData.append("file", file);
-        const res = await axios.post(
-          "https://blog.shbootcamp.com.ng/write_post.php",
-          formData
-        );
-        return res.data;
-      } catch (err) {
-        console.log(err);
+    const formData = new FormData();
+
+    formData.append("title", blogData.title);
+    formData.append("value", value);
+    formData.append("tag", blogData.tag);
+    formData.append("picture", blogData.picture);
+
+    console.log(formData)
+
+    try {
+      const res = await fetch(
+        `https://blog.shbootcamp.com.ng/write_post.php?user_id=${user_id}`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      const { status, message } = await res.json();
+
+      if (status === "success") {
+        console.log(message);
+
+        toast.success(message, {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: true,
+          pauseOnHover: true,
+          theme: "dark",
+        });
+        setBlogData({
+          title: "",
+          value: "",
+          tag: "",
+        });
+        setTimeout(() => {
+          navigate("/home");
+        }, 3000);
+      } else {
+        toast.error(message, {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: true,
+          pauseOnHover: true,
+          theme: "dark",
+        });
       }
-    };
-    upload();
-
-    const picture = await file.name;
-
-    const data = { user_id, title, picture, tag, value };
-
-    console.log("Clicked", data);
-
-    fetch("https://blog.shbootcamp.com.ng/write_post.php", {
-      method: "POST",
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        console.log(data);
+    } catch (error) {
+      console.error(error);
+      toast.error(error, {
+        position: "bottom-right",
+        autoClose: 2000,
+        hideProgressBar: true,
+        pauseOnHover: true,
+        theme: "dark",
       });
+    }
   };
 
   return (
     <div className="px-6">
-      <div className="add">
-        <div className="content">
+      <ToastContainer />
+      <div className="add mt-5 flex md:flex-row flex-col gap-5">
+        <div className="content flex gap-5 flex-col">
           <input
             className="p-[10px] border border-solid"
             type="text"
             name="title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            value={blogData.title}
+            onChange={handleInputChange}
             placeholder="Title"
           />
           <div className="h-[300px] overflow-scroll">
             <ReactQuill
               className="h-full border-b border-b-solid"
               theme="snow"
+              name="value"
               value={value}
               onChange={setValue}
             />
           </div>
         </div>
         <div className="menu">
-          <div className="item">
-            <h1>Publish</h1>
-            <span>
-              <b>Status:</b> Draft
-            </span>
-            <span>
-              <b>Visibility:</b> Public
-            </span>
-            <input
-              style={{ display: "none" }}
-              type="file"
-              name=""
-              onChange={(e) => setFile(e.target.files[0])}
-              id="file"
-            />
-            <label htmlFor="file">Upload Image</label>
+          <div className="item p-[10px] flex flex-row md:flex-col items-center md:items-start text-[12px] justify-between ">
+            <div>
+              <h1>Publish</h1>
+            </div>
+            <div>
+              <input
+                style={{ display: "none" }}
+                type="file"
+                name="picture"
+                onChange={handleFileInputChange}
+                id="file"
+              />
+              <label htmlFor="file">Upload Image</label>
+            </div>
             <div className="flex justify-between mt-2">
-              <Button primary={true} text="Update" onClick={handleUpdate} />
-              <Button text="Save blog" onClick={handleSubmit} />
+              {!state ? (
+                <Button text="Save blog" onClick={handleSubmit} />
+              ) : (
+                <Button
+                  primary={true}
+                  text="Update Blog"
+                  onClick={handleUpdate}
+                />
+              )}
             </div>
           </div>
-          <div className="item">
+          <div className="item p-[10px] flex flex-col text-[12px] justify-between ">
             <h1>Category</h1>
             <div className="cat">
               <input
                 type="radio"
-                name="cat"
-                checked={tag === "art"}
-                onChange={() => setTag("art")}
+                name="tag"
+                checked={blogData.tag === "art"}
                 value="art"
+                onChange={handleInputChange}
                 id="art"
               />
               <label htmlFor="art">Art</label>
@@ -146,10 +235,10 @@ const Write = () => {
             <div className="cat">
               <input
                 type="radio"
-                name="cat"
-                checked={tag === "science"}
-                onChange={() => setTag("science")}
-                value="art"
+                name="tag"
+                checked={blogData.tag === "science"}
+                value="science"
+                onChange={handleInputChange}
                 id="science"
               />
               <label htmlFor="science">Science</label>
@@ -157,10 +246,10 @@ const Write = () => {
             <div className="cat">
               <input
                 type="radio"
-                name="cat"
-                checked={tag === "technology"}
-                onChange={() => setTag("technology")}
-                value="art"
+                name="tag"
+                checked={blogData.tag === "technology"}
+                value="technology"
+                onChange={handleInputChange}
                 id="technology"
               />
               <label htmlFor="technology">Technology</label>
@@ -168,10 +257,10 @@ const Write = () => {
             <div className="cat">
               <input
                 type="radio"
-                name="cat"
-                checked={tag === "cinema"}
-                onChange={() => setTag("cinema")}
-                value="art"
+                name="tag"
+                checked={blogData.tag === "cinema"}
+                value="cinema"
+                onChange={handleInputChange}
                 id="cinema"
               />
               <label htmlFor="cinema">Cinema</label>
@@ -179,10 +268,10 @@ const Write = () => {
             <div className="cat">
               <input
                 type="radio"
-                name="cat"
-                checked={tag === "design"}
-                onChange={() => setTag("design")}
-                value="art"
+                name="tag"
+                checked={blogData.tag === "design"}
+                value="design"
+                onChange={handleInputChange}
                 id="design"
               />
               <label htmlFor="design">Design</label>
@@ -190,10 +279,10 @@ const Write = () => {
             <div className="cat">
               <input
                 type="radio"
-                name="cat"
-                checked={tag === "food"}
-                onChange={() => setTag("food")}
-                value="art"
+                name="tag"
+                checked={blogData.tag === "food"}
+                value="food"
+                onChange={handleInputChange}
                 id="food"
               />
               <label htmlFor="food">Food</label>

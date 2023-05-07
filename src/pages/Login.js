@@ -1,12 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Button from "../components/Button";
+import { ToastContainer, toast } from "react-toastify";
 
 const Login = () => {
   const navigate = useNavigate();
-
-  const [errMessage, setErrMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
 
   const [inputs, setInputs] = useState({
     email: "",
@@ -18,8 +16,6 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    console.log("Clicked");
 
     fetch("https://blog.shbootcamp.com.ng/signin.php", {
       method: "POST",
@@ -35,28 +31,35 @@ const Login = () => {
         const userId = data.user_id;
         const username = data.username;
 
-        console.log(data, inputs);
-
         if (data.status === "success") {
+          toast.success(data.message, {
+            position: "bottom-right",
+            autoClose: 2000,
+            hideProgressBar: true,
+            pauseOnHover: true,
+            theme: "dark"
+          })
           setTimeout(() => {
-            setSuccessMessage(data.message);
             sessionStorage.setItem("id", userId);
             sessionStorage.setItem("username", username);
             navigate("/home");
           }, 3000);
         } else if (data.status === "error") {
-          setErrMessage(data.message);
-          setTimeout(() => {
-            setErrMessage("");
-          }, 3000);
+          toast.error(data.message, {
+            position: "bottom-right",
+            autoClose: 2000,
+            hideProgressBar: true,
+            pauseOnHover: true,
+            theme: "dark"
+          })
         }
       });
   };
 
   return (
-    <div className="tommy bg-gradient-to-br from-purple-600 to-purple-950">
-      <h1 className="t-h1 text-white">Login</h1>
-      <form className="t-form">
+    <div className="tommy bg-gradient-to-br from-purple-600 to-purple-950 px-4">
+      <h1 className="text-white uppercase font-bold text-2xl mb-4">Login</h1>
+      <form className="flex flex-col gap-4 p-5 bg-white rounded-lg w-80">
         <input
           type="email"
           placeholder="Email"
@@ -74,8 +77,7 @@ const Login = () => {
         <div className="text-center">
           <Button onClick={handleSubmit} text="LOGIN" />
         </div>
-        <p className="text-sm text-center text-red-600">{errMessage}</p>
-        <p className="text-sm text-center text-green-600">{successMessage}</p>
+        <ToastContainer />
         <span className="t-span">
           Don't you have an account? <Link to="/register">Register</Link>
         </span>

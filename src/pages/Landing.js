@@ -6,10 +6,12 @@ import { truncateText } from "../utils/truncateText";
 import { getText } from "../utils/getText";
 import Picture from "../img/marguerite-729510__340.jpg";
 import Welcome from "../components/Welcome";
+import { ToastContainer, toast } from "react-toastify";
 
 const Landing = () => {
   const [posts, setPosts] = useState([]);
-  // const [fetching, isFetching] = useState("");
+
+  const [fetching, setFetching] = useState("Fetching Blogs...")
 
   const user = sessionStorage.getItem("id");
 
@@ -19,9 +21,19 @@ const Landing = () => {
     async function blogs() {
       const res = await fetch("https://blog.shbootcamp.com.ng/all_post.php");
       const data = await res.json();
-      const blog = data.message.all_post;
-      console.log(blog);
-      setPosts(blog);
+      if (data.status === "success") {
+        const blog = data.message.all_post;
+        setPosts(blog);
+        setFetching("")
+      } else {
+        toast.error(data.message, {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: true,
+          pauseOnHover: true,
+          theme: "dark",
+        });
+      }
     }
     blogs();
   }, [setPosts, userId]);
@@ -30,6 +42,9 @@ const Landing = () => {
     <>
       <Welcome primary={true} text="Welcome to" text2="CHAPTERS" />
       <div className="px-6">
+        <span className="flex text-lg justify-center">
+        {fetching}
+        </span>
         <Tab.Group>
           {/* <Tab.List>
           <Tab>All</Tab>
@@ -42,11 +57,10 @@ const Landing = () => {
                 {posts &&
                   posts.map((post) => (
                     <div
-                      className="odd:flex-row-reverse flex gap-[100px]"
+                      className="md:odd:flex-row-reverse flex flex-col md:flex-row gap-12 sm:gap-12 md:gap-24"
                       key={post.post_id}
                     >
                       <div className="post-img">
-                        {" "}
                         <div className="relative after:content-[''] after:w-full after:h-full after:bg-purple-300 after:absolute after:top-5 after:-left-5 after:-z-[1]">
                           <img
                             className="w-full max-h-[400px] object-cover"
@@ -57,9 +71,9 @@ const Landing = () => {
                       </div>
                       <div className="post-content flex flex-col justify-between">
                         <Link to={`/blog${post.post_id}`}>
-                          <h1 className="flex text-5xl">{post.blog_title}</h1>
+                          <h1 className="flex text-3xl sm:text-5xl md:text-3xl lg:text-5xl">{post.blog_title}</h1>
                         </Link>
-                        <p className="text-lg">
+                        <p className="my-2 text-sm sm:text-lg md:text-md lg:text-lg xl:text-xl">
                           {truncateText(getText(post.body))}
                         </p>
                         <Button
@@ -75,6 +89,7 @@ const Landing = () => {
           </Tab.Panels>
         </Tab.Group>
       </div>
+      <ToastContainer />
     </>
   );
 };
