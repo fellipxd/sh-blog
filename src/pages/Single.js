@@ -1,6 +1,6 @@
 import { CiEdit } from "react-icons/ci";
 import { RiDeleteBin3Line } from "react-icons/ri";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 // import Menu from "../components/Menu";
 import { useEffect, useState } from "react";
 import { getText } from "../utils/getText";
@@ -11,6 +11,7 @@ import { FaHeart } from "react-icons/fa";
 
 const Single = () => {
   const [posts, setPosts] = useState("");
+  const [post, setPost] = useState("");
   const [fetching, setFetching] = useState("Fetching Blogs...");
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState("");
@@ -21,8 +22,6 @@ const Single = () => {
   const [clicked, setClicked] = useState(false);
 
   const navigate = useNavigate();
-  const location = useLocation();
-  console.log(location);
 
   const { id } = useParams();
 
@@ -48,6 +47,7 @@ const Single = () => {
       const data = await res.json();
       const blog = data.fetch_post.post;
       setPosts(blog);
+      setPost(blog);
       setFetching("");
       setTag(data.fetch_post.post[0].tags);
     }
@@ -76,6 +76,10 @@ const Single = () => {
             theme: "dark",
             pauseOnHover: true,
           });
+        } else {
+          navigate(`/write?edit=${id}`, {
+            state:{post}
+          })
         }
       });
   };
@@ -223,11 +227,9 @@ const Single = () => {
                   </h1>
                   <span className="flex gap-2 -mt-4">
                     <span onClick={editPost}>
-                      <Link to={`/write?edit=${id}`} state={post}>
                         {
                           <CiEdit className="text-2xl md:text-3xl cursor-pointer hover:text-blue-600" />
                         }
-                      </Link>
                     </span>
                     <span onClick={deletePost}>
                       {
@@ -246,8 +248,8 @@ const Single = () => {
                   onClick={counter}
                   className={
                     clicked
-                      ? " hover:text-gray-500 focus:text-red-600 text-red-600 cursor-pointer text-3xl transition duration-100 ease-linear"
-                      : "hover:text-red-600 focus:text-gray-500 text-gray-500 cursor-pointer text-3xl transition duration-100 ease-linear"
+                      ? " hover:text-gray-500 text-red-600 cursor-pointer text-3xl transition duration-100 ease-linear"
+                      : "hover:text-red-600 text-gray-500 cursor-pointer text-3xl transition duration-100 ease-linear"
                   }
                 >
                   <FaHeart />

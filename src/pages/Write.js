@@ -18,13 +18,13 @@ const Write = () => {
 
   const state = useLocation().state;
 
-  const post_id = state?.post_id;
+  const post_id = state?.post[0].post_id;
 
   const user_id = sessionStorage.getItem("id");
-  const [value, setValue] = useState(state?.body || "");
-  const [title, setTitle] = useState(state?.blog_title || "");
+  const [value, setValue] = useState(state?.post[0].body || "");
+  const [title, setTitle] = useState(state?.post[0].blog_title || "");
   const [picture, setPicture] = useState(null);
-  const [tag, setTag] = useState(state?.tags || "");
+  const [tag, setTag] = useState(state?.post[0].tags || "");
 
   const handleUpdate = (e) => {
     e.preventDefault();
