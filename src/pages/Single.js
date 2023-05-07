@@ -7,7 +7,7 @@ import { getText } from "../utils/getText";
 import { ToastContainer, toast } from "react-toastify";
 import Picture from "../img/marguerite-729510__340.jpg";
 import Button from "../components/Button";
-import {FaHeart} from "react-icons/fa"
+import { FaHeart } from "react-icons/fa";
 
 const Single = () => {
   const [posts, setPosts] = useState("");
@@ -31,10 +31,14 @@ const Single = () => {
   const user_id = parseInt(user);
 
   const counter = (e) => {
-    e.preventDefault()
-    setClicked(!clicked)
-    setCount(currentCount => currentCount + 1)
-  }
+    e.preventDefault();
+    setClicked(!clicked);
+    if (clicked === false) {
+      setCount(count + 1);
+    } else {
+      setCount(count - 1);
+    }
+  };
 
   useEffect(() => {
     async function blogs() {
@@ -238,7 +242,14 @@ const Single = () => {
               </div>
 
               <div className="flex gap-4 items-center">
-                <span onClick={counter} className=" active:text-red-600 cursor-pointer text-gray-500 text-3xl transition duration-100 ease-linear">
+                <span
+                  onClick={counter}
+                  className={
+                    clicked
+                      ? " hover:text-gray-500 focus:text-red-600 text-red-600 cursor-pointer text-3xl transition duration-100 ease-linear"
+                      : "hover:text-red-600 focus:text-gray-500 text-gray-500 cursor-pointer text-3xl transition duration-100 ease-linear"
+                  }
+                >
                   <FaHeart />
                 </span>
                 <span className="text-2xl">{count}</span>
